@@ -1,0 +1,1 @@
+web: java -Dspring.profiles.active=prod $JAVA_OPTS -cp target/classes:target/dependency/* pl.miq3l.BttConnect
