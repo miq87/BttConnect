@@ -2,7 +2,6 @@ package pl.miq3l;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.commons.text.CaseUtils;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
@@ -263,12 +262,12 @@ public class PhConnect {
     }
 
     public static void main(String[] args) {
-//        PhConnect ph = PhConnect.getInstance();
-//        ph.login();
-//        ph.getOrderUnits(6)
-//                .parallelStream()
-//                .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
-//                .forEach(System.out::println);
+        PhConnect ph = PhConnect.getInstance();
+        ph.login();
+        ph.getOrderUnits(6)
+                .parallelStream()
+                .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
+                .forEach(System.out::println);
 //        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
     }
 }
