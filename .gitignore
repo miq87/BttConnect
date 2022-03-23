@@ -2,5 +2,4 @@
 lib
 target
 *.iml
-src/main/resources/config.json
 src/main/resources/cookies.json
