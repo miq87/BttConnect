@@ -59,7 +59,7 @@ public class PhConnect {
 
     private String getBaseUri() {
         try {
-            Response response = Jsoup.connect(cfgVars.get("introLoginUrl"))
+            Response response = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
                     .userAgent(cfgVars.get("userAgent")).method(Connection.Method.GET)
                     .followRedirects(true).execute();
             baseUri = response.url().toString();
@@ -80,8 +80,8 @@ public class PhConnect {
             for (Element input : inputs) {
                 formData.put(input.attr("name"), input.attr("value"));
             }
-            formData.put("UID", cfgVars.get("UID"));
-            formData.put("PWD", cfgVars.get("PWD"));
+            formData.put("UID", System.getenv("PH_UID"));
+            formData.put("PWD", System.getenv("PH_PWD"));
         }
         catch (IOException e) {
             System.err.println(e.getMessage());
@@ -195,7 +195,7 @@ public class PhConnect {
         Map<String, String> productDetails = new HashMap<>();
 
         try {
-            Response response = Jsoup.connect(cfgVars.get("searchFormUrl"))
+            Response response = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("searchFormUrl"))
                     .userAgent(cfgVars.get("userAgent")).method(Connection.Method.POST)
                     .cookies(cookies).followRedirects(true)
                     .data(searchFormValues)
@@ -218,7 +218,7 @@ public class PhConnect {
     public List<OrderUnit> getOrderUnits(int limit) {
         orderUnits.clear();
         try {
-            Document doc = Jsoup.connect(cfgVars.get("orderListUrl"))
+            Document doc = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("orderListUrl"))
                     .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
 
             Objects.requireNonNull(doc.select("font:contains(Sales Order)").first())
