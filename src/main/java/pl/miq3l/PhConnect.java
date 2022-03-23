@@ -246,13 +246,23 @@ public class PhConnect {
             String orderUrl = order.get().getOrderUrl();
 
             try {
-                Jsoup.connect(orderUrl)
-                        .userAgent(cfgVars.get("userAgent")).cookies(cookies).get()
-                        .select("font:contains(Part)")
+                Document doc = Jsoup.connect(orderUrl)
+                        .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
+
+                doc.select("font:contains(Part)")
                         .parents().get(2).select("tr[bgcolor=#EDEDF7]")
                         .stream()
                         .map(this::mapToOrderDetail)
                         .forEach(orderDetails::add);
+
+                try {
+                    String trackingNumberHref = Objects.requireNonNull(doc.select("b:contains(Tracking Number)")
+                            .first()).parents().get(0).select("a").attr("href");
+                    System.out.println(trackingNumberHref);
+                }
+                catch (NullPointerException e) {
+                    System.err.println("Tracking Number not found");
+                }
             }
             catch (IOException e) {
                 System.err.println(e.getMessage());
@@ -264,7 +274,7 @@ public class PhConnect {
     public static void main(String[] args) {
         PhConnect ph = PhConnect.getInstance();
         ph.login();
-        ph.getOrderUnits(6)
+        ph.getOrderUnits(3)
                 .parallelStream()
                 .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
                 .forEach(System.out::println);

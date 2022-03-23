@@ -22,7 +22,6 @@ public class BttService {
         System.out.println("Saved all inverters from BTT");
 
         System.out.println("PH_UID: " + System.getenv("PH_UID"));
-        System.out.println("PH_PWD: " + System.getenv("PH_PWD"));
         System.out.println("PH_URL: " + System.getenv("PH_URL"));
     }
 
