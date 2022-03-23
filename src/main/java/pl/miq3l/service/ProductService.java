@@ -58,8 +58,8 @@ public class ProductService {
         return products;
     }
 
-    public Product loadProductFromPh(String productCode) {
-        Product product = ph.getProductFromPh(productCode);
+    public Product loadProductFromPh(String part) {
+        Product product = ph.getProductFromPh(part);
         save(product);
         return product;
     }

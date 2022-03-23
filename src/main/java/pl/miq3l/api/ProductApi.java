@@ -39,9 +39,9 @@ public class ProductApi {
         return productService.loadAllProductsFromPh();
     }
 
-    @GetMapping("/load/{productCode}")
-    public Product loadProductFromPh(@PathVariable String productCode) {
-        return productService.loadProductFromPh(productCode);
+    @GetMapping("/load/{part}")
+    public Product loadProductFromPh(@PathVariable String part) {
+        return productService.loadProductFromPh(part);
     }
 
 }
