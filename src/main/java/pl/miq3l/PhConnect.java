@@ -202,7 +202,7 @@ public class PhConnect {
                     .execute();
             Document doc = response.parse();
 
-            Objects.requireNonNull(doc.select("font:contains(Net Price)").first())
+            Objects.requireNonNull(doc.select("font:contains(Available)").first())
                     .parents().get(3).select("div > font")
                     .forEach(c -> {
                         String[] strDetails = c.text().split(":");
@@ -278,6 +278,6 @@ public class PhConnect {
                 .parallelStream()
                 .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
                 .forEach(System.out::println);
-//        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
+        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
     }
 }
