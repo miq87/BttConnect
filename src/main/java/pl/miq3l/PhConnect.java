@@ -179,14 +179,11 @@ public class PhConnect {
         Map<String, String> map = new HashMap<>();
 
         try {
-            Elements els = Objects.requireNonNull(el.nextElementSibling()).select("b:contains(Tracking Number)");
-
-            System.out.println(els.parents().get(0));
-
-            //String href = Objects.requireNonNull(els.parents().get(1).select("a").first()).attr("href");
-
-            //System.out.println(href);
-
+            String trackingUrl = Objects.requireNonNull(el.nextElementSibling())
+                    .select("b:contains(Tracking Number)").first().parents().get(0)
+                    .select("a").attr("href");
+            System.out.println(trackingUrl);
+            map.put("trackingUrl", trackingUrl);
         }
         catch (NullPointerException e) {
             System.out.println("There is no tracking number");

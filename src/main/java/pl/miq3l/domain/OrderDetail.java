@@ -1,5 +1,6 @@
 package pl.miq3l.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class OrderDetail {
     private String shipQty;
     private String promiseDate;
     private String shipDate;
+    private String trackingUrl;
 
     public static List<String> getFields() {
         return Arrays.stream(OrderDetail.class.getDeclaredFields())
