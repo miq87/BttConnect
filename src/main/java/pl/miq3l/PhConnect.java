@@ -179,14 +179,13 @@ public class PhConnect {
         Map<String, String> map = new HashMap<>();
 
         try {
-            String trackingUrl = Objects.requireNonNull(el.nextElementSibling())
-                    .select("b:contains(Tracking Number)").first().parents().get(0)
+            String trackingUrl = Objects.requireNonNull(Objects.requireNonNull(el.nextElementSibling())
+                            .select("b:contains(Tracking Number)").first()).parents().get(0)
                     .select("a").attr("href");
-            System.out.println(trackingUrl);
             map.put("trackingUrl", trackingUrl);
         }
         catch (NullPointerException e) {
-            System.out.println("There is no tracking number");
+            map.put("trackingUrl", "");
         }
 
         Elements tds = el.select("td");
@@ -283,6 +282,6 @@ public class PhConnect {
                     System.out.println(c);
                     System.out.println("------------");
                 });
-//        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
+        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
     }
 }
