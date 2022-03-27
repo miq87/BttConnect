@@ -53,7 +53,7 @@ public class PhConnect {
                     new TypeReference<>(){});
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with loading config file " + e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class PhConnect {
             cookies.putAll(response.cookies());
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with loading data (base uri) " + e.getMessage());
         }
         return baseUri;
     }
@@ -95,7 +95,7 @@ public class PhConnect {
             System.out.println("Used cookies from the file: " + cookiesJsonFile.getPath());
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with loading cookies from file " + e.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public class PhConnect {
             mapper.writeValue(cookiesJsonFile, cookies);
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with saving cookies to file " + e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class PhConnect {
             saveCookiesToFile();
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with logging  " + e.getMessage());
         }
     }
 
@@ -186,6 +186,7 @@ public class PhConnect {
         }
         catch (NullPointerException e) {
             map.put("trackingUrl", "");
+            System.err.println("Problem with loading data (tracking url) " + e.getMessage());
         }
 
         Elements tds = el.select("td");
@@ -220,7 +221,7 @@ public class PhConnect {
                     });
         }
         catch (IOException | NullPointerException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with loading data (product from Ph) " + e.getMessage());
         }
         return mapToProduct(productDetails);
     }
@@ -237,7 +238,7 @@ public class PhConnect {
                     .map(this::mapToOrderUnit).forEach(orderUnits::add);
         }
         catch (IOException | NullPointerException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Problem with loading data (order units) " + e.getMessage());
         }
         return orderUnits;
     }
@@ -266,7 +267,7 @@ public class PhConnect {
                         .forEach(orderDetails::add);
             }
             catch (IOException e) {
-                System.err.println(e.getMessage());
+                System.err.println("Problem with loading data (order details) " + e.getMessage());
             }
         }
         return orderDetails;
