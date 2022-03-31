@@ -1,11 +1,11 @@
-package pl.miq3l.api;
+package pl.miq3l.bttconnect.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.miq3l.domain.Inverter;
-import pl.miq3l.service.BttService;
+import pl.miq3l.bttconnect.domain.Inverter;
+import pl.miq3l.bttconnect.service.BttService;
 
 import java.util.List;
 import java.util.TreeMap;

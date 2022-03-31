@@ -1,4 +1,4 @@
-package pl.miq3l;
+package pl.miq3l.bttconnect;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,9 +16,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import pl.miq3l.domain.OrderUnit;
-import pl.miq3l.domain.OrderDetail;
-import pl.miq3l.domain.Product;
+import pl.miq3l.bttconnect.domain.OrderUnit;
+import pl.miq3l.bttconnect.domain.OrderDetail;
+import pl.miq3l.bttconnect.domain.Product;
 
 public class PhConnect {
 

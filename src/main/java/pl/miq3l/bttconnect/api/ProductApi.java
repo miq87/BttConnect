@@ -1,10 +1,10 @@
-package pl.miq3l.api;
+package pl.miq3l.bttconnect.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import pl.miq3l.domain.Product;
-import pl.miq3l.service.ProductService;
+import pl.miq3l.bttconnect.domain.Product;
+import pl.miq3l.bttconnect.service.ProductService;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pl.miq3l;
+package pl.miq3l.bttconnect;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

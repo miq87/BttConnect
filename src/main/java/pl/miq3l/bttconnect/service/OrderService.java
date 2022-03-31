@@ -1,11 +1,11 @@
-package pl.miq3l.service;
+package pl.miq3l.bttconnect.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.miq3l.PhConnect;
-import pl.miq3l.domain.OrderDetail;
-import pl.miq3l.domain.OrderUnit;
-import pl.miq3l.repo.OrderRepo;
+import pl.miq3l.bttconnect.PhConnect;
+import pl.miq3l.bttconnect.domain.OrderDetail;
+import pl.miq3l.bttconnect.domain.OrderUnit;
+import pl.miq3l.bttconnect.repo.OrderRepo;
 
 import java.util.List;
 

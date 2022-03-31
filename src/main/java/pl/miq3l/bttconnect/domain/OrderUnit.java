@@ -1,4 +1,4 @@
-package pl.miq3l.domain;
+package pl.miq3l.bttconnect.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,17 +17,18 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inverter {
+public class OrderUnit {
     @Id
-    private String part;
-    private String power;
-    private String current;
-    private String dimensions;
-    private String powerSupply;
-    private String netto;
+    private String salesOrder;
+    private String orderUrl;
+    private String customerPo;
+    private String supplyingLocation;
+    private String orderDate;
+    private String lastShipment;
+    private String status;
 
     public static List<String> getFields() {
-        return Arrays.stream(Inverter.class.getDeclaredFields())
+        return Arrays.stream(OrderUnit.class.getDeclaredFields())
                 .map(Field::getName).collect(Collectors.toList());
     }
 }

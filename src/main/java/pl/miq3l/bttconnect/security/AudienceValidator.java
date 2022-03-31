@@ -1,4 +1,4 @@
-package pl.miq3l.security;
+package pl.miq3l.bttconnect.security;
 
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;

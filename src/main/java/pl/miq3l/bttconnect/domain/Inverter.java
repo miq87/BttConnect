@@ -1,6 +1,5 @@
-package pl.miq3l.domain;
+package pl.miq3l.bttconnect.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,21 +17,17 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail {
+public class Inverter {
     @Id
-    private String lineNbr;
     private String part;
-    private String orderQty;
-    private String unitPrice;
-    private String boQty;
-    private String allocQty;
-    private String shipQty;
-    private String promiseDate;
-    private String shipDate;
-    private String trackingUrl;
+    private String power;
+    private String current;
+    private String dimensions;
+    private String powerSupply;
+    private String netto;
 
     public static List<String> getFields() {
-        return Arrays.stream(OrderDetail.class.getDeclaredFields())
+        return Arrays.stream(Inverter.class.getDeclaredFields())
                 .map(Field::getName).collect(Collectors.toList());
     }
 }

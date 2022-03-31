@@ -1,4 +1,4 @@
-package pl.miq3l.domain;
+package pl.miq3l.bttconnect.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

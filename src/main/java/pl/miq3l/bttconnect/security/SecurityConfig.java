@@ -1,4 +1,4 @@
-package pl.miq3l.security;
+package pl.miq3l.bttconnect.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

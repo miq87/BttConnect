@@ -1,12 +1,11 @@
-package pl.miq3l;
+package pl.miq3l.bttconnect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.tongfei.progressbar.ProgressBar;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import pl.miq3l.domain.Inverter;
-import pl.miq3l.domain.Product;
+import pl.miq3l.bttconnect.domain.Inverter;
+import pl.miq3l.bttconnect.domain.Product;
 
 import java.io.IOException;
 import java.util.*;
