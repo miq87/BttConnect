@@ -186,7 +186,6 @@ public class PhConnect {
         }
         catch (NullPointerException e) {
             map.put("trackingUrl", "");
-            System.err.println("Problem with loading data (tracking url) " + e.getMessage());
         }
 
         Elements tds = el.select("td");
@@ -267,7 +266,7 @@ public class PhConnect {
                         .forEach(orderDetails::add);
             }
             catch (IOException e) {
-                System.err.println("Problem with loading data (order details) " + e.getMessage());
+                System.err.println("Problem with loading data (order details)");
             }
         }
         return orderDetails;
@@ -276,13 +275,13 @@ public class PhConnect {
     public static void main(String[] args) {
         PhConnect ph = PhConnect.getInstance();
         ph.login();
-        ph.getOrderUnits(4)
+        ph.getOrderUnits(2)
                 .parallelStream()
                 .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
                 .forEach(c -> {
                     System.out.println(c);
                     System.out.println("------------");
                 });
-        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
+        //System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
     }
 }
