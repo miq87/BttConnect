@@ -28,7 +28,7 @@ public class OrderApi {
 
     @GetMapping("/loadAll")
     public List<OrderUnit> loadAll() {
-        return orderService.loadAll();
+        return orderService.loadAll(10);
     }
 
     @GetMapping("/load/{customerPo}")

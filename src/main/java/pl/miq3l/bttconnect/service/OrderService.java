@@ -25,8 +25,9 @@ public class OrderService {
         return orderRepo.findAll();
     }
 
-    public List<OrderUnit> loadAll() {
-        return ph.getOrderUnits(3);
+    public List<OrderUnit> loadAll(int limit) {
+        orderRepo.saveAll(ph.getOrderUnits(limit));
+        return findAll();
     }
 
     public List<OrderDetail> getOrderDetailByCustomerPo(String customerPo) {
