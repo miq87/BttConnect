@@ -30,10 +30,6 @@ public class ProductService {
         repo.save(product);
     }
 
-    public void saveAll(List<Product> productList) {
-        repo.saveAll(productList);
-    }
-
     public List<Product> findAll() {
         return repo.findAll();
     }
@@ -61,6 +57,6 @@ public class ProductService {
     public Product loadProductFromPh(String part) {
         Product product = ph.getProductFromPh(part);
         save(product);
-        return product;
+        return findById(part);
     }
 }

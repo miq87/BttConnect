@@ -9,7 +9,7 @@ import pl.miq3l.bttconnect.service.ProductService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/parker/products")
+@RequestMapping("/api/products")
 public class ProductApi {
 
     private final ProductService productService;
@@ -17,11 +17,6 @@ public class ProductApi {
     @Autowired
     public ProductApi(ProductService productService) {
         this.productService = productService;
-    }
-
-    @GetMapping("/")
-    public String hello() {
-        return "MIQ3L";
     }
 
     @GetMapping("/{manufacturerPart}")

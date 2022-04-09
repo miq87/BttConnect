@@ -12,7 +12,7 @@ import pl.miq3l.bttconnect.service.OrderService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/parker/orders")
+@RequestMapping("/api/orders")
 public class OrderApi {
     private final OrderService orderService;
 

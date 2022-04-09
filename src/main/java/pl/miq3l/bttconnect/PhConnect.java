@@ -191,7 +191,8 @@ public class PhConnect {
         Elements tds = el.select("td");
         int i = 0;
         for (Element td : tds) {
-            map.put(cols.get(i++), td.text().replace("€", ""));
+            map.put(cols.get(i++),
+                    td.text().replace("€", "").replace(",", ""));
         }
         return mapper.convertValue(map, OrderDetail.class);
     }
@@ -220,7 +221,7 @@ public class PhConnect {
                     });
         }
         catch (IOException | NullPointerException e) {
-            System.err.println("Problem with loading data (product from Ph) " + e.getMessage());
+            System.err.println("Problem with loading data (product from Ph)");
         }
         return mapToProduct(productDetails);
     }
@@ -237,7 +238,7 @@ public class PhConnect {
                     .map(this::mapToOrderUnit).forEach(orderUnits::add);
         }
         catch (IOException | NullPointerException e) {
-            System.err.println("Problem with loading data (order units) " + e.getMessage());
+            System.err.println("Problem with loading data (order units) ");
         }
         return orderUnits;
     }

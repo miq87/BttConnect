@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>pl.miq3l</groupId>
+    <groupId>pl.miq3l.bttconnect</groupId>
     <artifactId>BttConnect</artifactId>
     <version>1.0-SNAPSHOT</version>
 
