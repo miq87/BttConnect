@@ -1,6 +1,7 @@
 package pl.miq3l.bttconnect.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import pl.miq3l.bttconnect.domain.Product;

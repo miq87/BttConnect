@@ -1,6 +1,7 @@
 package pl.miq3l.bttconnect.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import pl.miq3l.bttconnect.BTT;
@@ -31,7 +32,7 @@ public class ProductService {
     }
 
     public List<Product> findAll() {
-        return repo.findAll();
+        return repo.findAll(Sort.by(Sort.Direction.DESC, "dateAdded"));
     }
 
     public Product findById(String manufacturerPart) {
