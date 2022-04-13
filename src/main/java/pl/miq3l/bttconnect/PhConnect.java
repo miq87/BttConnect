@@ -168,7 +168,7 @@ public class PhConnect {
                 orderUnitMap.put(cols.get(i), els.get(i).select("a").text());
             }
             else {
-                orderUnitMap.put(cols.get(i+1), els.get(i).text());
+                orderUnitMap.put(cols.get(i), els.get(i).text());
             }
         }
         return mapper.convertValue(orderUnitMap, OrderUnit.class);

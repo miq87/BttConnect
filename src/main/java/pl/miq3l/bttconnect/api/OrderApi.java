@@ -32,7 +32,13 @@ public class OrderApi {
     }
 
     @GetMapping("/load/{customerPo}")
-    public List<OrderDetail> getOrderDetailByCustomerPo(@PathVariable("customerPo") String customerPo) {
-        return orderService.getOrderDetailByCustomerPo(customerPo.replaceAll("-", "/"));
+    public List<OrderDetail> loadOrderDetailByCustomerPo(@PathVariable("customerPo") String customerPo) {
+        return orderService.loadOrderDetailByCustomerPo(customerPo.replaceAll("-", "/"));
     }
+
+    @GetMapping("/{customerPo}")
+    public List<OrderDetail> findOrderDetailByCustomerPo(@PathVariable("customerPo") String customerPo) {
+        return orderService.findOrderDetailByCustomerPo(customerPo.replaceAll("-", "/"));
+    }
+
 }

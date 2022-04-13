@@ -7,6 +7,7 @@ import pl.miq3l.bttconnect.domain.OrderDetail;
 import pl.miq3l.bttconnect.domain.OrderUnit;
 import pl.miq3l.bttconnect.repo.OrderRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +31,17 @@ public class OrderService {
         return findAll();
     }
 
-    public List<OrderDetail> getOrderDetailByCustomerPo(String customerPo) {
-        return ph.getOrderDetailByCustomerPo(customerPo);
+    public List<OrderDetail> loadOrderDetailByCustomerPo(String customerPo) {
+        List<OrderDetail> orderDetails = ph.getOrderDetailByCustomerPo(customerPo);
+        if(orderRepo.findById(customerPo).isPresent())
+            orderRepo.findById(customerPo).get().setOrderDetails(orderDetails);
+        return orderRepo.findById(customerPo).get().getOrderDetails();
+    }
+
+    public List<OrderDetail> findOrderDetailByCustomerPo(String customerPo) {
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        if(orderRepo.findById(customerPo).isPresent())
+             orderDetails = orderRepo.findById(customerPo).get().getOrderDetails();
+        return orderDetails;
     }
 }
