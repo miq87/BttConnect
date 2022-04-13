@@ -26,8 +26,10 @@ public class OrderUnit {
     private String orderDate;
     private String lastShipment;
     private String status;
-    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OrderDetail> orderDetails;
+//    @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+//            orphanRemoval = true, targetEntity = OrderDetail.class)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
     public static List<String> getFields() {
         return List.of("salesOrder", "customerPo", "supplyingLocation", "orderDate", "lastShipment", "status");

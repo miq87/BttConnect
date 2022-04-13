@@ -27,6 +27,7 @@ public class OrderService {
     }
 
     public List<OrderUnit> loadAll(int limit) {
+        orderRepo.deleteAll();
         orderRepo.saveAll(ph.getOrderUnits(limit));
         return findAll();
     }

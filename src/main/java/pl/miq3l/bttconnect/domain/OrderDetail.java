@@ -30,6 +30,9 @@ public class OrderDetail {
     private String promiseDate;
     private String shipDate;
     private String trackingUrl;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "orderUnitId", referencedColumnName = "customerPo")
+//    private OrderUnit orderUnit;
 
     public static List<String> getFields() {
         return Arrays.stream(OrderDetail.class.getDeclaredFields())
