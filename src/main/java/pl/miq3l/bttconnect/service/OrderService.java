@@ -33,9 +33,12 @@ public class OrderService {
 
     public List<OrderDetail> loadOrderDetailByCustomerPo(String customerPo) {
         List<OrderDetail> orderDetails = ph.getOrderDetailByCustomerPo(customerPo);
-        if(orderRepo.findById(customerPo).isPresent())
-            orderRepo.findById(customerPo).get().setOrderDetails(orderDetails);
-        System.out.println("Zwrot z loadOrderDetailByCustomerPo");
+        if(orderRepo.findById(customerPo).isPresent()) {
+            OrderUnit orderUnit = orderRepo.findById(customerPo).get();
+            orderUnit.getOrderDetails().clear();
+            orderUnit.getOrderDetails().addAll(orderDetails);
+            orderRepo.save(orderUnit);
+        }
         return orderRepo.findById(customerPo).get().getOrderDetails();
     }
 
@@ -43,7 +46,6 @@ public class OrderService {
         List<OrderDetail> orderDetails = new ArrayList<>();
         if(orderRepo.findById(customerPo).isPresent())
              orderDetails = orderRepo.findById(customerPo).get().getOrderDetails();
-        System.out.println("Zwrot z findOrderDetailByCustomerPo");
         return orderDetails;
     }
 }

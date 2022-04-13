@@ -38,7 +38,6 @@ public class OrderApi {
 
     @GetMapping("/{customerPo}")
     public List<OrderDetail> findOrderDetailByCustomerPo(@PathVariable("customerPo") String customerPo) {
-        System.out.println("findOrderDetailByCustomerPo : " + customerPo);
         return orderService.findOrderDetailByCustomerPo(customerPo.replaceAll("-", "/"));
     }
 

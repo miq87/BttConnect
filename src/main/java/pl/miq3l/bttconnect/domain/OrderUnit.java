@@ -26,9 +26,8 @@ public class OrderUnit {
     private String orderDate;
     private String lastShipment;
     private String status;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn()
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails;
 
     public static List<String> getFields() {
         return List.of("salesOrder", "customerPo", "supplyingLocation", "orderDate", "lastShipment", "status");
