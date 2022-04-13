@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderDetail {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String lineNbr;
     private String part;
     private String orderQty;

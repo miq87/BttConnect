@@ -189,7 +189,7 @@ public class PhConnect {
         }
 
         Elements tds = el.select("td");
-        int i = 0;
+        int i = 1;
         for (Element td : tds) {
             map.put(cols.get(i++),
                     td.text().replace("€", "").replace(",", ""));

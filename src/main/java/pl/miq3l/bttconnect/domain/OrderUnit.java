@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +27,7 @@ public class OrderUnit {
     private String lastShipment;
     private String status;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn()
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     public static List<String> getFields() {
