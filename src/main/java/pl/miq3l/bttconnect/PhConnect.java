@@ -1,5 +1,6 @@
 package pl.miq3l.bttconnect;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.text.CaseUtils;
@@ -10,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -194,6 +196,7 @@ public class PhConnect {
             map.put(cols.get(i++),
                     td.text().replace("€", "").replace(",", ""));
         }
+        //map.put("orderUnit", "{}");
         return mapper.convertValue(map, OrderDetail.class);
     }
 

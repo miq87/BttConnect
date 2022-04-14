@@ -34,9 +34,13 @@ public class OrderService {
 
     public List<OrderDetail> loadOrderDetailByCustomerPo(String customerPo) {
         List<OrderDetail> orderDetails = ph.getOrderDetailByCustomerPo(customerPo);
+
         if(orderRepo.findById(customerPo).isPresent()) {
             OrderUnit orderUnit = orderRepo.findById(customerPo).get();
             orderUnit.getOrderDetails().clear();
+
+            orderDetails.forEach(od -> od.setOrderUnit(orderUnit));
+
             orderUnit.getOrderDetails().addAll(orderDetails);
             orderRepo.save(orderUnit);
         }

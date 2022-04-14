@@ -1,5 +1,6 @@
 package pl.miq3l.bttconnect.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,9 +31,10 @@ public class OrderDetail {
     private String promiseDate;
     private String shipDate;
     private String trackingUrl;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "orderUnitId", referencedColumnName = "customerPo")
-//    private OrderUnit orderUnit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderUnitId", referencedColumnName = "customerPo")
+    @JsonIgnore
+    private OrderUnit orderUnit;
 
     public static List<String> getFields() {
         return Arrays.stream(OrderDetail.class.getDeclaredFields())
