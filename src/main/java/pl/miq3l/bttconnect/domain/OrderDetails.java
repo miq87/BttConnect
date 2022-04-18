@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail {
+public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,7 @@ public class OrderDetail {
     private OrderUnit orderUnit;
 
     public static List<String> getFields() {
-        return Arrays.stream(OrderDetail.class.getDeclaredFields())
+        return Arrays.stream(OrderDetails.class.getDeclaredFields())
                 .map(Field::getName).collect(Collectors.toList());
     }
 }

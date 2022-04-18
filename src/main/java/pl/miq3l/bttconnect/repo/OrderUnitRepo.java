@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.miq3l.bttconnect.domain.OrderUnit;
 
 @Repository
-public interface OrderRepo extends JpaRepository<OrderUnit, String> {
+public interface OrderUnitRepo extends JpaRepository<OrderUnit, String> {
 }

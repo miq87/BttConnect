@@ -6,11 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -28,7 +24,7 @@ public class OrderUnit {
     private String status;
     @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<OrderDetail> orderDetails;
+    private List<OrderDetails> orderDetails;
 
     public static List<String> getFields() {
         return List.of("salesOrder", "customerPo", "supplyingLocation",

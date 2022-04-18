@@ -1,6 +1,5 @@
 package pl.miq3l.bttconnect;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.text.CaseUtils;
@@ -11,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -19,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import pl.miq3l.bttconnect.domain.OrderUnit;
-import pl.miq3l.bttconnect.domain.OrderDetail;
+import pl.miq3l.bttconnect.domain.OrderDetails;
 import pl.miq3l.bttconnect.domain.Product;
 
 public class PhConnect {
@@ -27,6 +25,7 @@ public class PhConnect {
     private static PhConnect INSTANCE;
     private Map<String, String> cookies;
     private final List<OrderUnit> orderUnits;
+    private final List<OrderDetails> orderDetails;
     private final File cookiesJsonFile;
     private Map<String, String> cfgVars;
     private final ObjectMapper mapper;
@@ -36,6 +35,7 @@ public class PhConnect {
         cookiesJsonFile = new File("src/main/resources/cookies.json");
         cookies = new HashMap<>();
         orderUnits = new ArrayList<>();
+        orderDetails = new ArrayList<>();
         mapper = new ObjectMapper();
         loadConfigFile();
     }
@@ -176,8 +176,8 @@ public class PhConnect {
         return mapper.convertValue(orderUnitMap, OrderUnit.class);
     }
 
-    private OrderDetail mapToOrderDetail(Element el) {
-        List<String> cols = OrderDetail.getFields();
+    private OrderDetails mapToOrderDetail(Element el) {
+        List<String> cols = OrderDetails.getFields();
         Map<String, String> map = new HashMap<>();
 
         try {
@@ -197,7 +197,7 @@ public class PhConnect {
                     td.text().replace("€", "").replace(",", ""));
         }
         //map.put("orderUnit", "{}");
-        return mapper.convertValue(map, OrderDetail.class);
+        return mapper.convertValue(map, OrderDetails.class);
     }
 
     public Product getProductFromPh(String productCode) {
@@ -246,42 +246,45 @@ public class PhConnect {
         return orderUnits;
     }
 
-    public List<OrderDetail> getOrderDetailByCustomerPo(String customerPo) {
-        List<OrderDetail> orderDetails = new ArrayList<>();
+    public List<OrderDetails> getOrderDetailsByCustomerPo(String customerPo) {
+        this.orderDetails.clear();
         if(orderUnits.size() < 1) {
             System.out.println("Order List is empty");
             return orderDetails;
         }
-
         Optional<OrderUnit> order = orderUnits.stream()
                 .filter(c -> c.getCustomerPo().equals(customerPo)).findFirst();
 
-        if(order.isPresent()) {
-            String orderUrl = order.get().getOrderUrl();
-
-            try {
-                Document doc = Jsoup.connect(orderUrl)
-                        .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
-
-                doc.select("font:contains(Part)")
-                        .parents().get(2).select("tr[bgcolor=#EDEDF7]")
-                        .stream()
-                        .map(this::mapToOrderDetail)
-                        .forEach(orderDetails::add);
-            }
-            catch (IOException e) {
-                System.err.println("Problem with loading data (order details)");
-            }
-        }
-        return orderDetails;
+        order.ifPresent(orderUnit -> getOrderDetailsByOrderUrl(orderUnit.getOrderUrl()));
+        return this.orderDetails;
     }
+
+    // new
+    public List<OrderDetails> getOrderDetailsByOrderUrl(String orderUrl) {
+        this.orderDetails.clear();
+        try {
+            Document doc = Jsoup.connect(orderUrl)
+                    .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
+
+            doc.select("font:contains(Part)")
+                    .parents().get(2).select("tr[bgcolor=#EDEDF7]")
+                    .stream()
+                    .map(this::mapToOrderDetail)
+                    .forEach(orderDetails::add);
+        }
+        catch (IOException e) {
+            System.err.println("Problem with loading data (order details)");
+        }
+        return this.orderDetails;
+    }
+    // end new
 
     public static void main(String[] args) {
         PhConnect ph = PhConnect.getInstance();
         ph.login();
         ph.getOrderUnits(2)
                 .parallelStream()
-                .map(c -> ph.getOrderDetailByCustomerPo(c.getCustomerPo()))
+                .map(c -> ph.getOrderDetailsByCustomerPo(c.getCustomerPo()))
                 .forEach(c -> {
                     System.out.println(c);
                     System.out.println("------------");
