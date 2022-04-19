@@ -35,6 +35,17 @@ public class PhConnect {
     private PhConnect() {
         loadConfigFile();
         login();
+
+        TimerTask task = new TimerTask() {
+            public void run() {
+                System.out.println("----- AUTO LOGIN -----");
+                System.out.println("Task performed on: " + new Date());
+                forceLogin();
+            }
+        };
+
+        Timer timer = new Timer("Timer");
+        timer.schedule(task, 1000L, 1000 * 60 * 30); // 30 minutes
     }
 
     public static PhConnect getInstance() {
@@ -61,7 +72,7 @@ public class PhConnect {
                     .userAgent(cfgVars.get("userAgent")).method(Connection.Method.GET)
                     .followRedirects(true).execute();
             baseUri = response.url().toString();
-            System.out.println("Base URI: " + baseUri);
+            System.out.println("BASE URI: " + baseUri);
             cookies.putAll(response.cookies());
         }
         catch (IOException e) {
@@ -123,28 +134,29 @@ public class PhConnect {
             this.cookies.clear();
             this.cookies.putAll(response.cookies());
             saveCookiesToFile();
+            System.out.println("LOGGED IN\n----------------");
         }
         catch (IOException e) {
             System.err.println("PROBLEM WITH LOGIN");
         }
     }
 
-    public void checkIsLoggedIn() {
-        try {
-            Document doc = Jsoup.connect(
-                    System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
-                    .cookies(cookies)
-                    .userAgent(cfgVars.get("userAgent")).get();
-
-            if(doc.body().select("div:contains(Logged In)").first() == null) {
-                System.out.println("FORCE LOGIN");
-                forceLogin();
-            }
-        }
-        catch (IOException e) {
-            System.err.println("PROBLEM WITH CHECKING IS LOGGED");
-        }
-    }
+//    public void checkIsLoggedIn() {
+//        try {
+//            Document doc = Jsoup.connect(
+//                    System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
+//                    .cookies(cookies)
+//                    .userAgent(cfgVars.get("userAgent")).get();
+//
+//            if(doc.body().select("div:contains(Logged In)").first() == null) {
+//                System.out.println("FORCE LOGIN");
+//                forceLogin();
+//            }
+//        }
+//        catch (IOException e) {
+//            System.err.println("PROBLEM WITH CHECKING IS LOGGED");
+//        }
+//    }
 
     private Map<String, String> getSearchValues(String strValues) {
         Map<String, String> searchFormValues = new HashMap<>();
@@ -240,14 +252,13 @@ public class PhConnect {
                     });
         }
         catch (IOException | NullPointerException e) {
-            System.err.println("Problem with loading data (product from Ph)");
+            System.err.println("PROBLEM WITH LOADING DATA FROM PH");
         }
         return mapToProduct(productDetails);
     }
 
     public List<OrderUnit> getOrderUnits(int limit) {
         orderUnits.clear();
-        checkIsLoggedIn();
         try {
             Document doc = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("orderListUrl"))
                     .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
@@ -258,7 +269,7 @@ public class PhConnect {
                     .map(this::mapToOrderUnit).forEach(orderUnits::add);
         }
         catch (IOException | NullPointerException e) {
-            System.err.println("Problem with loading data (order units) ");
+            System.err.println("PROBLEM WITH LOADING DATA (ORDER UNITS)");
         }
         return orderUnits;
     }
@@ -266,7 +277,7 @@ public class PhConnect {
     public List<OrderDetails> getOrderDetailsByCustomerPo(String customerPo) {
         this.orderDetails.clear();
         if(orderUnits.size() < 1) {
-            System.out.println("Order List is empty");
+            System.out.println("ORDER LIST IS EMPTY");
             return orderDetails;
         }
         Optional<OrderUnit> order = orderUnits.stream()
@@ -278,7 +289,6 @@ public class PhConnect {
 
     // new
     public List<OrderDetails> getOrderDetailsByOrderUrl(String orderUrl) {
-        checkIsLoggedIn();
         this.orderDetails.clear();
         try {
             Document doc = Jsoup.connect(orderUrl)
@@ -291,7 +301,7 @@ public class PhConnect {
                     .forEach(orderDetails::add);
         }
         catch (IOException e) {
-            System.err.println("Problem with loading data (order details)");
+            System.err.println("PROBLEM WITH LOADING DATA (ORDER DETAILS)");
         }
         return this.orderDetails;
     }
