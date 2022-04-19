@@ -23,21 +23,18 @@ import pl.miq3l.bttconnect.domain.Product;
 public class PhConnect {
 
     private static PhConnect INSTANCE;
-    private Map<String, String> cookies;
-    private final List<OrderUnit> orderUnits;
-    private final List<OrderDetails> orderDetails;
-    private final File cookiesJsonFile;
+    private Map<String, String> cookies = new HashMap<>();
+    private final List<OrderUnit> orderUnits = new ArrayList<>();
+    private final List<OrderDetails> orderDetails = new ArrayList<>();
+    private final File cookiesJsonFile =
+            new File("src/main/resources/cookies.json");
     private Map<String, String> cfgVars;
-    private final ObjectMapper mapper;
+    private final ObjectMapper mapper = new ObjectMapper();
     private String baseUri;
 
     private PhConnect() {
-        cookiesJsonFile = new File("src/main/resources/cookies.json");
-        cookies = new HashMap<>();
-        orderUnits = new ArrayList<>();
-        orderDetails = new ArrayList<>();
-        mapper = new ObjectMapper();
         loadConfigFile();
+        login();
     }
 
     public static PhConnect getInstance() {
@@ -48,14 +45,13 @@ public class PhConnect {
     }
 
     private void loadConfigFile() {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             cfgVars = mapper.readValue(
                     new File("src/main/resources/config.json"),
                     new TypeReference<>(){});
         }
         catch (IOException e) {
-            System.err.println("Problem with loading config file " + e.getMessage());
+            System.err.println("PROBLEM WITH LOADING CONFIG FILE");
         }
     }
 
@@ -69,7 +65,7 @@ public class PhConnect {
             cookies.putAll(response.cookies());
         }
         catch (IOException e) {
-            System.err.println("Problem with loading data (base uri) " + e.getMessage());
+            System.err.println("PROBLEM WITH LOADING DATA (BASEURI)");
         }
         return baseUri;
     }
@@ -94,10 +90,10 @@ public class PhConnect {
     private void loadCookiesFromFile() {
         try {
             cookies = mapper.readValue(cookiesJsonFile, new TypeReference<>() {});
-            System.out.println("Used cookies from the file: " + cookiesJsonFile.getPath());
+            System.out.println("USED COOKIES FROM FILE: " + cookiesJsonFile.getPath());
         }
         catch (IOException e) {
-            System.err.println("Problem with loading cookies from file " + e.getMessage());
+            System.err.println("PROBLEM WITH LOADING COOKIES FROM FILE");
         }
     }
 
@@ -106,27 +102,47 @@ public class PhConnect {
             mapper.writeValue(cookiesJsonFile, cookies);
         }
         catch (IOException e) {
-            System.err.println("Problem with saving cookies to file " + e.getMessage());
+            System.err.println("PROBLEM WITH SAVING COOKIES TO FILE");
         }
     }
 
     public void login() {
         if(cookies.size() > 0)
             return;
-
         if(cookiesJsonFile.exists()) {
             loadCookiesFromFile();
-            return;
-        }
+        } else
+            forceLogin();
+    }
+
+    public void forceLogin() {
         try {
             Response response = Jsoup.connect(getBaseUri())
                     .userAgent(cfgVars.get("userAgent")).method(Connection.Method.POST)
                     .data(prepareFormData()).followRedirects(true).execute();
+            this.cookies.clear();
             this.cookies.putAll(response.cookies());
             saveCookiesToFile();
         }
         catch (IOException e) {
-            System.err.println("Problem with logging  " + e.getMessage());
+            System.err.println("PROBLEM WITH LOGIN");
+        }
+    }
+
+    public void checkIsLoggedIn() {
+        try {
+            Document doc = Jsoup.connect(
+                    System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
+                    .cookies(cookies)
+                    .userAgent(cfgVars.get("userAgent")).get();
+
+            if(doc.body().select("div:contains(Logged In)").first() == null) {
+                System.out.println("FORCE LOGIN");
+                forceLogin();
+            }
+        }
+        catch (IOException e) {
+            System.err.println("PROBLEM WITH CHECKING IS LOGGED");
         }
     }
 
@@ -231,6 +247,7 @@ public class PhConnect {
 
     public List<OrderUnit> getOrderUnits(int limit) {
         orderUnits.clear();
+        checkIsLoggedIn();
         try {
             Document doc = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("orderListUrl"))
                     .userAgent(cfgVars.get("userAgent")).cookies(cookies).get();
@@ -261,6 +278,7 @@ public class PhConnect {
 
     // new
     public List<OrderDetails> getOrderDetailsByOrderUrl(String orderUrl) {
+        checkIsLoggedIn();
         this.orderDetails.clear();
         try {
             Document doc = Jsoup.connect(orderUrl)
@@ -281,14 +299,11 @@ public class PhConnect {
 
     public static void main(String[] args) {
         PhConnect ph = PhConnect.getInstance();
-        ph.login();
         ph.getOrderUnits(2)
                 .parallelStream()
                 .map(c -> ph.getOrderDetailsByCustomerPo(c.getCustomerPo()))
-                .forEach(c -> {
-                    System.out.println(c);
-                    System.out.println("------------");
-                });
-        //System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
+                .forEach(System.out::println);
+
+        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
     }
 }
