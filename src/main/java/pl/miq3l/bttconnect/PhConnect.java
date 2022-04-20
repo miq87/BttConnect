@@ -45,7 +45,7 @@ public class PhConnect {
         };
 
         Timer timer = new Timer("Timer");
-        timer.schedule(task, 1000L, 1000 * 60 * 30); // 30 minutes
+        timer.schedule(task, 3000L, 1000 * 60 * 30); // 30 minutes
     }
 
     public static PhConnect getInstance() {
