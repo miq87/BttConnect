@@ -14,8 +14,12 @@ import java.util.*;
 public class ExcelHandler {
 
     private static ExcelHandler INSTANCE;
-    private final Map<String, Inverter> products;
     ObjectMapper mapper = new ObjectMapper();
+    private final int FIRST_ROW_TO_GET = 1;
+    private final Map<String, String> map = new TreeMap<>();
+    private final List<String> cols = Inverter.getFields();
+    private final List<Inverter> inverters = new ArrayList<>();
+    private final File excelFile = new File("src/main/resources/products.xlsx");
 
     public static ExcelHandler getInstance() {
         if(INSTANCE == null) {
@@ -24,36 +28,34 @@ public class ExcelHandler {
         return INSTANCE;
     }
 
-    private ExcelHandler() {
-        this.products = new HashMap<>();
+    public List<Inverter> getInverters() {
+        return inverters;
     }
 
-    private void read() {
-        Map<String, String> map = new TreeMap<>();
-        List<String> cols = Inverter.getFields();
-        Inverter inverter;
+    private ExcelHandler() {
+    }
 
+    public void read() {
         try {
-            File excelFile = new File("src/main/resources/products.xlsx");
             FileInputStream fis = new FileInputStream(excelFile);
-
             XSSFWorkbook workbook = new XSSFWorkbook(fis);
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            int FIRST_ROW_TO_GET = 1;
+            Iterator<Sheet> sheetIterator = workbook.sheetIterator();
 
-            for (int i = FIRST_ROW_TO_GET; i < sheet.getLastRowNum(); i++) {
-                Row row = sheet.getRow(i);
-                Iterator<Cell> cellIterator = row.cellIterator();
+            while(sheetIterator.hasNext()) {
+                Sheet sheet = sheetIterator.next();
+                System.out.println(sheet.getSheetName());
 
-                int y = 0;
-                while (cellIterator.hasNext()) {
-                    Cell cell = cellIterator.next();
-                    map.put(cols.get(y++), cell.toString());
+                switch (sheet.getSheetName()) {
+                    case "AC10_IP20":
+                        this.getInvertersFromSheet(sheet);
+                        break;
+                    case "AC10_IP66":
+                        this.getInvertersFromSheet(sheet);
+                        break;
+                    default:
+                        break;
                 }
-                inverter = mapper.convertValue(map, Inverter.class);
-                this.products.put(inverter.getPart(), inverter);
             }
-
             workbook.close();
             fis.close();
         }
@@ -63,10 +65,24 @@ public class ExcelHandler {
 
     }
 
+    private void getInvertersFromSheet(Sheet sheet) {
+        for (int i = FIRST_ROW_TO_GET; i < sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            Iterator<Cell> cellIterator = row.cellIterator();
+
+            int y = 0;
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
+                map.put(cols.get(y++), cell.toString());
+            }
+            this.inverters.add(mapper.convertValue(map, Inverter.class));
+        }
+    }
+
     public static void main(String[] args) {
-        ExcelHandler.getInstance().read();
-        ExcelHandler.getInstance().products.entrySet()
-                .forEach(System.out::println);
+        ExcelHandler eh = ExcelHandler.getInstance();
+        eh.read();
+        eh.inverters.forEach(System.out::println);
     }
 
 }
