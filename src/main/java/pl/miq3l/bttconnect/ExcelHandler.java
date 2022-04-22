@@ -2,7 +2,6 @@ package pl.miq3l.bttconnect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import pl.miq3l.bttconnect.domain.Inverter;
 
@@ -15,7 +14,6 @@ public class ExcelHandler {
 
     private static ExcelHandler INSTANCE;
     ObjectMapper mapper = new ObjectMapper();
-    private final int FIRST_ROW_TO_GET = 1;
     private final Map<String, String> map = new TreeMap<>();
     private final List<String> cols = Inverter.getFields();
     private final List<Inverter> inverters = new ArrayList<>();
@@ -32,8 +30,7 @@ public class ExcelHandler {
         return inverters;
     }
 
-    private ExcelHandler() {
-    }
+    private ExcelHandler() { }
 
     public void read() {
         try {
@@ -66,6 +63,7 @@ public class ExcelHandler {
     }
 
     private void getInvertersFromSheet(Sheet sheet) {
+        int FIRST_ROW_TO_GET = 1;
         for (int i = FIRST_ROW_TO_GET; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             Iterator<Cell> cellIterator = row.cellIterator();
@@ -82,7 +80,7 @@ public class ExcelHandler {
     public static void main(String[] args) {
         ExcelHandler eh = ExcelHandler.getInstance();
         eh.read();
-        eh.inverters.forEach(System.out::println);
+        eh.getInverters().forEach(System.out::println);
     }
 
 }
