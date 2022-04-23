@@ -30,11 +30,6 @@ public class ProductApi {
         return productService.findAll();
     }
 
-    @GetMapping("/loadAll")
-    public List<Product> loadAllProductsFromPh() {
-        return productService.loadAllProductsFromPh();
-    }
-
     @GetMapping("/load/{part}")
     public Product loadProductFromPh(@PathVariable String part) {
         return productService.loadProductFromPh(part);
