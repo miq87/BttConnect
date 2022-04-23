@@ -33,7 +33,6 @@ public class PhConnect {
 
     private PhConnect() {
         loadConfigFile();
-        login();
 
         TimerTask task = new TimerTask() {
             public void run() {
