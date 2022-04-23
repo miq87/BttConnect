@@ -19,7 +19,6 @@ public class OrderUnitService {
     public OrderUnitService(OrderUnitRepo orderUnitRepo) {
         this.orderUnitRepo = orderUnitRepo;
         ph = PhConnect.getInstance();
-        ph.login();
     }
 
     public List<OrderUnit> findAll() {

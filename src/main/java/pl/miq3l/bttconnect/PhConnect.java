@@ -21,7 +21,6 @@ import pl.miq3l.bttconnect.domain.OrderDetails;
 import pl.miq3l.bttconnect.domain.Product;
 
 public class PhConnect {
-
     private static PhConnect INSTANCE;
     private Map<String, String> cookies = new HashMap<>();
     private final List<OrderUnit> orderUnits = new ArrayList<>();

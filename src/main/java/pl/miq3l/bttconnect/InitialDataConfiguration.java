@@ -11,13 +11,12 @@ public class InitialDataConfiguration {
 
     @Autowired
     private InverterService inverterService;
-    private ExcelHandler eh;
 
     @PostConstruct
     public void postConstruct() {
         System.out.println("Started after Spring boot application !");
 
-        eh = ExcelHandler.getInstance();
+        ExcelHandler eh = ExcelHandler.getInstance();
         eh.read();
 
         inverterService.saveAll(eh.getInverters());

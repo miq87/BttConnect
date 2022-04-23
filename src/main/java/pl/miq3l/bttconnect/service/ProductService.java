@@ -24,7 +24,6 @@ public class ProductService {
         this.repo = productRepo;
         btt = BTT.getInstance();
         ph = PhConnect.getInstance();
-        ph.login();
     }
 
     public void save(Product product) {
@@ -36,23 +35,7 @@ public class ProductService {
     }
 
     public Product findById(String manufacturerPart) {
-        return repo.findById(manufacturerPart).get();
-    }
-
-    public List<Product> loadAllProductsFromPh() {
-        List<Product> products = new ArrayList<>();
-        btt.loadAllInvertersFromBTT().keySet()
-                .parallelStream()
-                .limit(5)
-                .forEach(c -> {
-                    Product product = ph.getProductFromPh(c);
-                    if (product != null) {
-                        products.add(product);
-                        save(product);
-                        System.out.printf("[ %s ] : SAVED\n", product.getManufacturerPart());
-                    }
-                });
-        return products;
+        return repo.findById(manufacturerPart).orElseThrow();
     }
 
     public Product loadProductFromPh(String part) {
