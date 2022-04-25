@@ -2,7 +2,7 @@ package pl.miq3l.bttconnect;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import pl.miq3l.bttconnect.service.InverterService;
+import pl.miq3l.bttconnect.service.PartsService;
 
 import javax.annotation.PostConstruct;
 
@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 public class InitialDataConfiguration {
 
     @Autowired
-    private InverterService inverterService;
+    private PartsService partsService;
 
     @PostConstruct
     public void postConstruct() {
@@ -18,8 +18,7 @@ public class InitialDataConfiguration {
 
         ExcelHandler eh = ExcelHandler.getInstance();
         eh.read();
-
-        inverterService.saveAll(eh.getInverters());
+        partsService.saveAll(eh.getParts());
     }
 
 }

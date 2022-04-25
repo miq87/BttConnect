@@ -24,7 +24,7 @@ public class Inverter {
     private String current;
     private String dimensions;
     private String powerSupply;
-    private String netto;
+    //private String netto;
 
     public static List<String> getFields() {
         return Arrays.stream(Inverter.class.getDeclaredFields())

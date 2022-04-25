@@ -23,7 +23,7 @@ public class OrderUnit {
     private String lastShipment;
     private String status;
     @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true)
+            fetch = FetchType.EAGER, orphanRemoval = true)
     private List<OrderDetails> orderDetails;
 
     public static List<String> getFields() {

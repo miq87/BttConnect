@@ -18,11 +18,7 @@ public class BttService {
     public BttService(InverterRepo inverterRepo) {
         this.inverterRepo = inverterRepo;
         btt = BTT.getInstance();
-        inverterRepo.saveAll(btt.loadAllInvertersFromBTT().values());
-        System.out.println("Saved all inverters from BTT");
-
-        System.out.println("PH_UID: " + System.getenv("PH_UID"));
-        System.out.println("PH_URL: " + System.getenv("PH_URL"));
+        //inverterRepo.saveAll(btt.loadAllInvertersFromBTT().values());
     }
 
     public List<Inverter> findAll() {

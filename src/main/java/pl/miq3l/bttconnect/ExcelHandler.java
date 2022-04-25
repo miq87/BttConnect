@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import pl.miq3l.bttconnect.domain.Inverter;
+import pl.miq3l.bttconnect.domain.Part;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +18,7 @@ public class ExcelHandler {
     private final Map<String, String> map = new TreeMap<>();
     private final List<String> cols = Inverter.getFields();
     private final List<Inverter> inverters = new ArrayList<>();
+    private final List<Part> parts = new ArrayList<>();
     private final File excelFile = new File("src/main/resources/products.xlsx");
 
     public static ExcelHandler getInstance() {
@@ -28,6 +30,10 @@ public class ExcelHandler {
 
     public List<Inverter> getInverters() {
         return inverters;
+    }
+
+    public List<Part> getParts() {
+        return parts;
     }
 
     private ExcelHandler() { }
@@ -73,14 +79,22 @@ public class ExcelHandler {
                 Cell cell = cellIterator.next();
                 map.put(cols.get(y++), cell.toString());
             }
-            this.inverters.add(mapper.convertValue(map, Inverter.class));
+            Inverter inverter = mapper.convertValue(map, Inverter.class);
+            this.inverters.add(inverter);
+            Part part = Part.builder()
+                    .part(inverter.getPart())
+                    .description("AC10 Parker " + inverter.getPower() + "kW/"
+                            + inverter.getPowerSupply().split("/")[0]
+                            + "V")
+                    .build();
+            this.parts.add(part);
         }
     }
 
     public static void main(String[] args) {
         ExcelHandler eh = ExcelHandler.getInstance();
         eh.read();
-        eh.getInverters().forEach(System.out::println);
+        eh.getParts().forEach(System.out::println);
     }
 
 }

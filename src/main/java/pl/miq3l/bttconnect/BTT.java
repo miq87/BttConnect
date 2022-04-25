@@ -5,22 +5,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import pl.miq3l.bttconnect.domain.Inverter;
-import pl.miq3l.bttconnect.domain.Product;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BTT {
     private static BTT INSTANCE;
-    private final ObjectMapper mapper;
-    private final List<Product> products;
-    private final TreeMap<String, Inverter> inverters;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final TreeMap<String, Inverter> inverters = new TreeMap<>();
 
-    private BTT() {
-        mapper = new ObjectMapper();
-        products = new ArrayList<>();
-        inverters = new TreeMap<>();
-    }
+    private BTT() { }
 
     public static BTT getInstance() {
         if(INSTANCE == null) {
@@ -34,9 +29,11 @@ public class BTT {
 
         Elements tds = el.select("td");
 
-        for (int i = 1; i < tds.size(); i++) {
-            inverterParameters.put(Inverter.getFields().get(i-1), tds.get(i).text());
-        }
+        AtomicInteger i = new AtomicInteger();
+        tds.stream().skip(1).limit(5).forEach(td -> {
+            inverterParameters.put(Inverter.getFields().get(i.getAndIncrement()), td.text());
+        });
+
         return mapper.convertValue(inverterParameters, Inverter.class);
     }
 
@@ -61,31 +58,4 @@ public class BTT {
         return inverters;
     }
 
-//    public List<Product> loadAllProductsFromPh(int limit) {
-//        Set<String> inverterCodes = loadAllInvertersFromBTT().keySet();
-//        PhConnect ph = PhConnect.getInstance();
-//        ph.login();
-//        products.clear();
-//
-//        if(limit > inverterCodes.size()) {
-//            limit = inverterCodes.size();
-//        }
-//
-//        ProgressBar pb = new ProgressBar("BTT", limit);
-//
-//        inverterCodes.parallelStream().limit(limit).forEach(c -> {
-//            products.add(ph.getProductFromPh(c));
-//            pb.step();
-//            pb.setExtraMessage("Reading...");
-//        });
-//        pb.close();
-//        return products;
-//    }
-//
-//    public static void main(String[] args) {
-//        BTT.getInstance().loadAllInvertersFromBTT().forEach((key, value) -> {
-//            System.out.println(key + " = " + value);
-//        });
-//        BTT.getInstance().loadAllProductsFromPh(5).forEach(System.out::println);
-//    }
 }
