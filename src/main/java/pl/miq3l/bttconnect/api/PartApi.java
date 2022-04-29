@@ -11,16 +11,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/parts")
-public class PartsApi {
+public class PartApi {
 
     private final PartsService partsService;
 
     @Autowired
-    public PartsApi(PartsService partsService) {
+    public PartApi(PartsService partsService) {
         this.partsService = partsService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Part> findAll() {
         return partsService.findAll();
     }

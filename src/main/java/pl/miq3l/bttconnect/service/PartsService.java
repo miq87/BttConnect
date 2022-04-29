@@ -3,22 +3,22 @@ package pl.miq3l.bttconnect.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.miq3l.bttconnect.domain.Part;
-import pl.miq3l.bttconnect.repo.PartsRepo;
+import pl.miq3l.bttconnect.repo.PartRepo;
 
 import java.util.List;
 
 @Service
 public class PartsService {
-    private final PartsRepo partsRepo;
+    private final PartRepo partRepo;
 
     @Autowired
-    public PartsService(PartsRepo partsRepo) {
-        this.partsRepo = partsRepo;
+    public PartsService(PartRepo partRepo) {
+        this.partRepo = partRepo;
     }
 
     public List<Part> findAll() {
-        return partsRepo.findAll();
+        return partRepo.findAll();
     }
 
-    public List<Part> saveAll(List<Part> parts) { return partsRepo.saveAll(parts); }
+    public List<Part> saveAll(List<Part> parts) { return partRepo.saveAll(parts); }
 }
