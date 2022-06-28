@@ -17,9 +17,9 @@ public class ProductService {
     private final PhConnect ph;
 
     @Autowired
-    public ProductService(ProductRepo productRepo) {
+    public ProductService(ProductRepo productRepo, PhConnect ph) {
         this.repo = productRepo;
-        ph = PhConnect.getInstance();
+        this.ph = ph;
     }
 
     public void save(Product product) {

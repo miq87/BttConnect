@@ -16,9 +16,9 @@ public class OrderUnitService {
     private final PhConnect ph;
 
     @Autowired
-    public OrderUnitService(OrderUnitRepo orderUnitRepo) {
+    public OrderUnitService(OrderUnitRepo orderUnitRepo, PhConnect ph) {
         this.orderUnitRepo = orderUnitRepo;
-        ph = PhConnect.getInstance();
+        this.ph = ph;
     }
 
     public List<OrderUnit> findAll() {

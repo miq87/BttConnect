@@ -16,12 +16,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pl.miq3l.bttconnect.domain.OrderUnit;
 import pl.miq3l.bttconnect.domain.OrderDetails;
 import pl.miq3l.bttconnect.domain.Product;
 
+@Component
 public class PhConnect {
-    private static PhConnect INSTANCE;
     private Map<String, String> cookies = new HashMap<>();
     private final List<OrderUnit> orderUnits = new ArrayList<>();
     private final List<OrderDetails> orderDetails = new ArrayList<>();
@@ -33,7 +35,11 @@ public class PhConnect {
 
     private PhConnect() {
         loadConfigFile();
+        login();
+        setTimer();
+    }
 
+    private void setTimer() {
         TimerTask task = new TimerTask() {
             public void run() {
                 System.out.println("----- AUTO LOGIN -----");
@@ -43,14 +49,8 @@ public class PhConnect {
         };
 
         Timer timer = new Timer("Timer");
-        timer.schedule(task, 3000L, 1000 * 60 * 30); // 30 minutes
-    }
-
-    public static PhConnect getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new PhConnect();
-        }
-        return INSTANCE;
+        long period = 1000 * 60 * 120;                // 2 hours / 120 min
+        timer.schedule(task, period, period);
     }
 
     private void loadConfigFile() {
@@ -139,22 +139,21 @@ public class PhConnect {
         }
     }
 
-//    public void checkIsLoggedIn() {
-//        try {
-//            Document doc = Jsoup.connect(
-//                    System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
-//                    .cookies(cookies)
-//                    .userAgent(cfgVars.get("userAgent")).get();
-//
-//            if(doc.body().select("div:contains(Logged In)").first() == null) {
-//                System.out.println("FORCE LOGIN");
-//                forceLogin();
-//            }
-//        }
-//        catch (IOException e) {
-//            System.err.println("PROBLEM WITH CHECKING IS LOGGED");
-//        }
-//    }
+    public boolean checkIsLoggedIn() {
+        try {
+            Document doc = Jsoup.connect(
+                    System.getenv("PH_URL") + cfgVars.get("introLoginUrl"))
+                    .cookies(cookies)
+                    .userAgent(cfgVars.get("userAgent")).get();
+
+            if(doc.body().select("div:contains(Logged In)").isEmpty())
+                return false;
+        }
+        catch (IOException e) {
+            System.err.println("PROBLEM WITH CHECKING IS LOGGED");
+        }
+        return true;
+    }
 
     private Map<String, String> getSearchValues(String strValues) {
         Map<String, String> searchFormValues = new HashMap<>();
@@ -222,7 +221,6 @@ public class PhConnect {
             map.put(cols.get(i++),
                     td.text().replace("€", "").replace(",", ""));
         }
-        //map.put("orderUnit", "{}");
         return mapper.convertValue(map, OrderDetails.class);
     }
 
@@ -285,7 +283,6 @@ public class PhConnect {
         return this.orderDetails;
     }
 
-    // new
     public List<OrderDetails> getOrderDetailsByOrderUrl(String orderUrl) {
         this.orderDetails.clear();
         try {
@@ -303,15 +300,19 @@ public class PhConnect {
         }
         return this.orderDetails;
     }
-    // end new
 
-    public static void main(String[] args) {
-        PhConnect ph = PhConnect.getInstance();
-        ph.getOrderUnits(2)
-                .parallelStream()
-                .map(c -> ph.getOrderDetailsByCustomerPo(c.getCustomerPo()))
-                .forEach(System.out::println);
+//    public static void main(String[] args) {
+//
+//        PhConnect ph = new PhConnect();
+//
+//        System.out.println("Is logged in? " + ph.checkIsLoggedIn());
+//
+//        ph.getOrderUnits(2)
+//                .parallelStream()
+//                .map(c -> ph.getOrderDetailsByCustomerPo(c.getCustomerPo()))
+//                .forEach(System.out::println);
+//
+//        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
+//    }
 
-        System.out.println(ph.getProductFromPh("590P-53327032-P00-U4V0"));
-    }
 }
