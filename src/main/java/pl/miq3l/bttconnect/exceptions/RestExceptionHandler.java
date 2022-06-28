@@ -27,6 +27,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(InverterNotFoundException.class)
+    protected ResponseEntity<Object> handleException(InverterNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Nie znaleziono invertera", ex);
+        return buildResponseEntity(apiError);
+    }
+
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }

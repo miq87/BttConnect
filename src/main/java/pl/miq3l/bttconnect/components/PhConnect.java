@@ -90,7 +90,7 @@ public class PhConnect {
             formData.put("PWD", System.getenv("PH_PWD"));
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("PROBLEM WITH PREPARING DATA");
         }
         return formData;
     }

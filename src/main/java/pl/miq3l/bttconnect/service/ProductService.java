@@ -10,6 +10,7 @@ import pl.miq3l.bttconnect.repo.ProductRepo;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -38,13 +39,11 @@ public class ProductService {
     public Product loadProductFromPh(String part) {
         Product product = ph.getProductFromPh(part);
 
-        System.out.println(product);
-
-        if(product != null) {
-            save(product);
-            return product;
+        if(product == null) {
+            throw new NoSuchElementException();
         }
-        throw new NoSuchElementException();
+        save(product);
+        return product;
 
     }
 }
