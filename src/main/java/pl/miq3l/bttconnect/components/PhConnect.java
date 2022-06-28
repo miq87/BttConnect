@@ -1,4 +1,4 @@
-package pl.miq3l.bttconnect;
+package pl.miq3l.bttconnect.components;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,11 +16,10 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.miq3l.bttconnect.domain.OrderUnit;
-import pl.miq3l.bttconnect.domain.OrderDetails;
-import pl.miq3l.bttconnect.domain.Product;
+import pl.miq3l.bttconnect.models.OrderUnit;
+import pl.miq3l.bttconnect.models.OrderDetails;
+import pl.miq3l.bttconnect.models.Product;
 
 @Component
 public class PhConnect {
@@ -232,6 +231,8 @@ public class PhConnect {
         Map<String, String> searchFormValues = getSearchValues(strValues);
         Map<String, String> productDetails = new HashMap<>();
 
+        Product product = null;
+
         try {
             Response response = Jsoup.connect(System.getenv("PH_URL") + cfgVars.get("searchFormUrl"))
                     .userAgent(cfgVars.get("userAgent")).method(Connection.Method.POST)
@@ -240,17 +241,22 @@ public class PhConnect {
                     .execute();
             Document doc = response.parse();
 
-            Objects.requireNonNull(doc.select("font:contains(Available)").first())
-                    .parents().get(3).select("div > font")
-                    .forEach(c -> {
-                        String[] strDetails = c.text().split(":");
-                        productDetails.put(strDetails[0], strDetails.length > 1 ? strDetails[1].trim() : "");
-                    });
+            Elements els = doc.select("font:contains(Available:)");
+
+            if(els.isEmpty()) return null;
+
+            els.first().parents().get(3).select("div > font").forEach(c -> {
+                String[] strDetails = c.text().split(":");
+                productDetails.put(strDetails[0], strDetails.length > 1 ? strDetails[1].trim() : "");
+            });
+
+            product = mapToProduct(productDetails);
+
         }
         catch (IOException | NullPointerException e) {
             System.err.println("PROBLEM WITH LOADING DATA FROM PH");
         }
-        return mapToProduct(productDetails);
+        return product;
     }
 
     public List<OrderUnit> getOrderUnits(int limit) {

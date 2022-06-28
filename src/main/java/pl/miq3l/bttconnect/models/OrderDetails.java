@@ -1,4 +1,4 @@
-package pl.miq3l.bttconnect.domain;
+package pl.miq3l.bttconnect.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

@@ -2,9 +2,9 @@ package pl.miq3l.bttconnect.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.miq3l.bttconnect.PhConnect;
-import pl.miq3l.bttconnect.domain.OrderDetails;
-import pl.miq3l.bttconnect.domain.OrderUnit;
+import pl.miq3l.bttconnect.components.PhConnect;
+import pl.miq3l.bttconnect.models.OrderDetails;
+import pl.miq3l.bttconnect.models.OrderUnit;
 import pl.miq3l.bttconnect.repo.OrderUnitRepo;
 
 import java.util.ArrayList;

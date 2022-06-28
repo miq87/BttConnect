@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.miq3l.bttconnect.domain.OrderDetails;
-import pl.miq3l.bttconnect.domain.OrderUnit;
+import pl.miq3l.bttconnect.models.OrderDetails;
+import pl.miq3l.bttconnect.models.OrderUnit;
 import pl.miq3l.bttconnect.service.OrderUnitService;
 
 import java.util.List;

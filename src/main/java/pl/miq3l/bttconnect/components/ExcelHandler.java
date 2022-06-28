@@ -1,56 +1,28 @@
-package pl.miq3l.bttconnect;
+package pl.miq3l.bttconnect.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import pl.miq3l.bttconnect.domain.Inverter;
-import pl.miq3l.bttconnect.domain.Part;
+import org.springframework.stereotype.Component;
+import pl.miq3l.bttconnect.components.model.Inverter_AC30;
+import pl.miq3l.bttconnect.models.Inverter;
+import pl.miq3l.bttconnect.models.Part;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-class Inverter_AC30 {
-    private String part;
-    private String output;
-    private String filter;
-
-    public static List<String> getFields() {
-        return Arrays.stream(Inverter_AC30.class.getDeclaredFields())
-                .map(Field::getName).collect(Collectors.toList());
-    }
-}
-
+@Component
 public class ExcelHandler {
 
-    private static ExcelHandler INSTANCE;
     private final List<Part> parts = new ArrayList<>();
     private final File excelFile = new File("src/main/resources/products.xlsx");
     ObjectMapper mapper = new ObjectMapper();
 
-    public static ExcelHandler getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new ExcelHandler();
-        }
-        return INSTANCE;
-    }
-
     public List<Part> getParts() {
         return parts;
     }
-
-    private ExcelHandler() { }
 
     public void read() {
         try {
@@ -116,12 +88,6 @@ public class ExcelHandler {
                 this.parts.add(part);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        ExcelHandler eh = ExcelHandler.getInstance();
-        eh.read();
-        eh.getParts().forEach(System.out::println);
     }
 
 }

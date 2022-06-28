@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import pl.miq3l.bttconnect.PhConnect;
-import pl.miq3l.bttconnect.domain.Product;
+import pl.miq3l.bttconnect.components.PhConnect;
+import pl.miq3l.bttconnect.models.Product;
 import pl.miq3l.bttconnect.repo.ProductRepo;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
@@ -36,7 +37,14 @@ public class ProductService {
 
     public Product loadProductFromPh(String part) {
         Product product = ph.getProductFromPh(part);
-        save(product);
-        return findById(part);
+
+        System.out.println(product);
+
+        if(product != null) {
+            save(product);
+            return product;
+        }
+        throw new NoSuchElementException();
+
     }
 }
