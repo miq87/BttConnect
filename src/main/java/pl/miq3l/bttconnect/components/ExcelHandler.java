@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
-import pl.miq3l.bttconnect.components.model.Inverter_AC30;
+import pl.miq3l.bttconnect.models.Inverter_AC30;
 import pl.miq3l.bttconnect.models.Inverter;
 import pl.miq3l.bttconnect.models.Part;
 

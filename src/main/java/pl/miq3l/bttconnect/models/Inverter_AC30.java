@@ -1,4 +1,4 @@
-package pl.miq3l.bttconnect.components.model;
+package pl.miq3l.bttconnect.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
