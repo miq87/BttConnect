@@ -20,6 +20,11 @@ public class OrderDetailsApi {
         this.orderDetailsService = orderDetailsService;
     }
 
+    @GetMapping("/all")
+    public List<OrderDetails> findAll() {
+        return orderDetailsService.findAll();
+    }
+
     @GetMapping("/{customerPo}")
     public List<OrderDetails> findById(@PathVariable("customerPo") String customerPo) {
         customerPo = customerPo.replaceAll("-", "/");

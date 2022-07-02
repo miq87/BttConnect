@@ -20,4 +20,7 @@ public class OrderDetailsService {
         return orderDetailsRepo.findOrderDetailsByCustomerPo(customerPo);
     }
 
+    public List<OrderDetails> findAll() {
+        return orderDetailsRepo.findAll();
+    }
 }
