@@ -1,5 +1,6 @@
 package pl.miq3l.bttconnect.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,12 +23,28 @@ public class OrderUnit {
     private String orderDate;
     private String lastShipment;
     private String status;
-    @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JsonIgnore
     private List<OrderDetails> orderDetails;
 
     public static List<String> getFields() {
         return List.of("salesOrder", "customerPo", "supplyingLocation",
                 "orderDate", "lastShipment", "status");
     }
+
+    public void addOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails.clear();
+        this.orderDetails.addAll(orderDetails);
+        orderDetails.forEach(od -> {
+            od.setOrderUnit(this);
+        });
+    }
+
+    public void removeOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails.clear();
+        orderDetails.forEach(od -> {
+            od.setOrderUnit(null);
+        });
+    }
+
 }

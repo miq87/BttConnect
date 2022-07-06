@@ -31,8 +31,8 @@ public class OrderDetails {
     private String promiseDate;
     private String shipDate;
     private String trackingUrl;
-    @ManyToOne
-    //@JoinColumn(name = "orderUnitId", referencedColumnName = "customerPo")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderUnitId", referencedColumnName = "customerPo")
     @JsonIgnore
     private OrderUnit orderUnit;
 

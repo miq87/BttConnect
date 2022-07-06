@@ -17,7 +17,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<Object> handleException(NoSuchElementException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "NoSuchElement", ex);
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Element not found", ex);
         return buildResponseEntity(apiError);
     }
 
@@ -29,7 +29,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InverterNotFoundException.class)
     protected ResponseEntity<Object> handleException(InverterNotFoundException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Nie znaleziono invertera", ex);
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Inverter not found", ex);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(OrderDetailsNotFound.class)
+    protected ResponseEntity<Object> handleException(OrderDetailsNotFound ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Order details not found", ex);
         return buildResponseEntity(apiError);
     }
 
