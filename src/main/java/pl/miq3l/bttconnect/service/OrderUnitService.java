@@ -9,7 +9,6 @@ import pl.miq3l.bttconnect.models.OrderDetails;
 import pl.miq3l.bttconnect.models.OrderUnit;
 import pl.miq3l.bttconnect.repo.OrderUnitRepo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,32 +33,14 @@ public class OrderUnitService {
     }
 
     public List<OrderDetails> loadOrderDetailByCustomerPo(String customerPo) {
-//        List<OrderDetails> orderDetails = new ArrayList<>();
-//        if(orderUnitRepo.findById(customerPo).isPresent()) {
-//            OrderUnit orderUnit = orderUnitRepo.findById(customerPo).get();
-//            orderUnit.getOrderDetails().clear();
-//
-//            orderDetails = ph.getOrderDetailsByOrderUrl(orderUnit.getOrderUrl());
-//
-//            orderDetails.forEach(od -> od.setOrderUnit(orderUnit));
-//
-//            orderUnit.getOrderDetails().addAll(orderDetails);
-//            orderUnitRepo.save(orderUnit);
-//            orderDetails = orderUnitRepo.findById(customerPo).get().getOrderDetails();
-//        }
-//        return orderDetails;
         OrderUnit orderUnit = orderUnitRepo.findById(customerPo).orElseThrow(OrderNotFoundException::new);
         List<OrderDetails> orderDetails = ph.getOrderDetailsByOrderUrl(orderUnit.getOrderUrl());
         orderUnit.addOrderDetails(orderDetails);
         orderUnitRepo.save(orderUnit);
         return orderUnitRepo.findById(customerPo).orElseThrow(OrderNotFoundException::new).getOrderDetails();
-
     }
 
     public List<OrderDetails> findOrderDetailByCustomerPo(String customerPo) {
-//        List<OrderDetails> orderDetails = new ArrayList<>();
-//        if(orderUnitRepo.findById(customerPo).isPresent())
-//             orderDetails = orderUnitRepo.findById(customerPo).get().getOrderDetails();
         return orderUnitRepo.findById(customerPo).orElseThrow(OrderDetailsNotFound::new).getOrderDetails();
     }
 }

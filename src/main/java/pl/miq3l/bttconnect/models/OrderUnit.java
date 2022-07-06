@@ -1,6 +1,5 @@
 package pl.miq3l.bttconnect.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,6 @@ public class OrderUnit {
     private String lastShipment;
     private String status;
     @OneToMany(mappedBy = "orderUnit", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonIgnore
     private List<OrderDetails> orderDetails;
 
     public static List<String> getFields() {
