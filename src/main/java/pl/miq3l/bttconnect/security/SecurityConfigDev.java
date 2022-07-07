@@ -37,8 +37,15 @@ public class SecurityConfigDev extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/api/**").permitAll()
-                .and().cors()
-                .and().oauth2ResourceServer().jwt();
+                .antMatchers("/").permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/h2/**").permitAll()
+                .and()
+                .headers().frameOptions().disable()
+                .and()
+                .csrf().ignoringAntMatchers("/h2/**")
+                .and()
+                .cors().disable();
     }
 }
