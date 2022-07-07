@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 
@@ -18,6 +19,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<Object> handleException(NoSuchElementException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, "Element not found", ex);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(SQLException.class)
+    protected ResponseEntity<Object> handleException(SQLException ex) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "SQL query problem", ex);
         return buildResponseEntity(apiError);
     }
 
